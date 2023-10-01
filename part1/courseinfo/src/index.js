@@ -1,3 +1,4 @@
+import { getValue } from '@testing-library/user-event/dist/utils'
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -20,21 +21,22 @@ const Header = (props) => {
 }
 
 const Content = (props) => {
+  const [p1,p2,p3] = props.parts
   return (
     <>
-      <Part part={props.part1} />
-      <Part part={props.part2} />
-      <Part part={props.part3} />
+      <Part part = {p1} />
+      <Part part = {p2} />
+      <Part part = {p3} />
     </>
   )
 }
 
 const Total = (props) => {
+  const [p1,p2,p3] = props.parts
   return(
     <>
       <p>
-        Number of exercises {props.part1.exercises +
-                          props.part2.exercises + props.part3.exercises}
+        Number of exercises {p1.exercises + p2.exercises + p3.exercises}
       </p>
     </>
   )
@@ -42,24 +44,26 @@ const Total = (props) => {
 
 const App = () => {
   const course = 'Half Stack application development'
-  const part1 = {
-    name: 'Fundamentals of React',
-    exercises: 10
-  }
-  const part2 = {
-    name: 'Using props to pass data',
-    exercises: 7
-  }
-  const part3 = {
-    name: 'State of a component',
-    exercises: 14
-  }
+  const parts = [
+    {
+      name: 'Fundamentals of React',
+      exercises: 10
+    },
+    {
+      name: 'Using props to pass data',
+      exercises: 7
+    },
+    {
+      name: 'State of a component',
+      exercises: 14
+    }
+  ]
 
   return (
     <div>
       <Header course={course} />
-      <Content part1={part1} part2={part2} part3={part3} />
-      <Total part1={part1} part2={part2} part3={part3} />
+      <Content parts = {parts} />
+      <Total parts = {parts} />
     </div>
   )
 }
