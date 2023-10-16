@@ -1,6 +1,18 @@
 import React, { useState } from 'react'
 import * as ReactDOMClient from 'react-dom/client'
 
+const DisplayAnecdote = ({anecdotes, points}) => {
+
+  const maxVotes = Math.max.apply(null, points)
+  const indexMaxVotes = points.indexOf(maxVotes)
+
+  return(
+    <>
+      <p>{anecdotes[indexMaxVotes]}</p>
+      <p>has {maxVotes} votes</p>
+    </>
+  )
+}
 
 const Button = ({handleClick, text}) => {
   return(
@@ -25,10 +37,14 @@ const App = (props) => {
 
   return (
     <div>
+      <h1>Anecdote of the day</h1>
       <p>{props.anecdotes[selected]}</p>
       <p>has {points[selected]} votes</p>
       <Button handleClick={() => handleVote(selected)} text={'vote'} />
       <Button handleClick={handleRandom} text={'next anecdote'} />
+
+      <h1>Anecdote with  most votes</h1>
+      <DisplayAnecdote anecdotes={props.anecdotes} points={points} />
     </div>
   )
 }
