@@ -25,7 +25,7 @@ function App() {
   return (
     <div className="App">
       <Filter filter={filter} setFilter={setFilter} text={"find countries:"} />
-      <DisplayCountries countries={countriesToShow} />
+      <DisplayCountries countries={countriesToShow} setFilter={setFilter} />
     </div>
   );
 }

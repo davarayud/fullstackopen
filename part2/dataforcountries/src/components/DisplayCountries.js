@@ -1,10 +1,23 @@
 import React from "react";
 
-const DisplayLine = ({ countrie }) => <p>{countrie.name.common}</p>
+const DisplayLine = ({ countrie, setFilter }) => {
+  const handleClick = () => setFilter(countrie.name.common)
+  return(
+    <p>
+      {countrie.name.common}
+      <button onClick={handleClick}>show</button>
+    </p>
+  )
+}
 
-const ShowCountries = ({ countries }) =>
-  countries.map(countrie => <
-    DisplayLine key={countrie.name.common} countrie={countrie} />)
+const ShowCountries = ({ countries, setFilter}) =>
+  countries.map(countrie => 
+    <DisplayLine 
+      key={countrie.name.common} 
+      countrie={countrie} 
+      setFilter={setFilter} 
+    />
+  )
 
 const LanguageLine = ({ language }) => <li>{language}</li>
 
@@ -28,7 +41,7 @@ const ShowOneCountrie = ({ countrie }) =>{
   )
 } 
 
-  const DisplayCountries = ({ countries }) =>{
+  const DisplayCountries = ({ countries, setFilter }) =>{
   if(countries.length > 10){
     return(
       <p>Too many matches, specify another filter.</p>
@@ -36,7 +49,7 @@ const ShowOneCountrie = ({ countrie }) =>{
   }
   if(countries.length > 1 && countries.length < 11){
     return(
-      <ShowCountries countries={countries} />
+      <ShowCountries countries={countries} setFilter={setFilter}/>
     )
   }
   if(countries.length === 1){
