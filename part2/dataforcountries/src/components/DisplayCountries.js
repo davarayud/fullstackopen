@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, {useState, useEffect} from "react";
 
 const DisplayLine = ({ countrie, setFilter }) => {
   const handleClick = () => setFilter(countrie.name.common)
@@ -25,8 +26,53 @@ const ShowLanguages = ({ languages }) =>
   languages.map(language => 
     <LanguageLine key={language} language={language} />)
 
+const ShowWeatherIcons = ({weatherIcons}) => weatherIcons.map(icon =>
+    <img key={icon} src={icon} alt="weater icon"/>)
+
+const ShowWeather = ({weather}) => {
+  const windSpeedMph = parseInt(weather.windSpeed*0.621371)
+  return(
+    <>
+      <p>
+        <b>Temperature: </b>
+        {weather.temperature} Celcius
+      </p>
+      <ShowWeatherIcons weatherIcons={weather.weatherIcons} />
+      <p>
+        <b>Wind: </b>
+        {windSpeedMph} mph direction {weather.windDir}
+      </p>
+    </>
+  )
+}
+
 const ShowOneCountrie = ({ countrie }) =>{
+  const [weather, setWeather] = useState({
+    temperature:'',
+    weatherIcons:[],
+    windSpeed:'',
+    windDir:''
+  })
   const languages = Object.values(countrie.languages)
+  const params = {
+    access_key: process.env.REACT_APP_API_KEY,
+    query: countrie.capital[0]
+  }
+  const hook = () =>{
+    axios
+      .get('https://cors-anywhere.herokuapp.com/http://api.weatherstack.com/current', {params})
+      .then(response => {
+        setWeather({
+          temperature: response.data.current.temperature,
+          weatherIcons: response.data.current.weather_icons,
+          windSpeed: response.data.current.wind_speed,
+          windDir: response.data.current.wind_dir
+        })
+      })
+      .catch(error => {console.log(error)})
+  }
+  useEffect(hook,[])
+
   return(
     <div>
       <h1>{countrie.name.common}</h1>
@@ -37,6 +83,7 @@ const ShowOneCountrie = ({ countrie }) =>{
         <ShowLanguages languages={languages} />
       </ul>
       <img src={countrie.flags.png} alt="flag of countrie"/>
+      <ShowWeather weather={weather} />
     </div>
   )
 } 
